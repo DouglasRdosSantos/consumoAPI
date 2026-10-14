@@ -9,7 +9,7 @@ import Footer from "./componentes/Footer";
 function App() {
   return (
     <>
-      <Header />
+        <MovieEe />
 
       <main>
         <Perfil />
@@ -17,17 +17,16 @@ function App() {
         <div className="ticks"></div>
 
         <section id="next-steps">
-          <Pokemon />
           <FilmeFavorito />
+          <Pokemon />
         </section>
 
         <div className="ticks"></div>
 
         <section id="busca">
-          <MovieEe />
+          
         </section>
       </main>
-
       <Footer />
     </>
   );
