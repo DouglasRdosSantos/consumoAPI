@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 function MovieEe() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState(false);
   const [query, setQuery] = useState('Avengers');
   const API_KEY = '59ab1eb9';
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
+      setErro(false);
       try {
         const response = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`);
         const data = await response.json();
@@ -20,6 +22,8 @@ function MovieEe() {
         }
       } catch (error) {
         console.error("Erro ao buscar filmes:", error);
+        setMovies([]); // Não mantém resultados da busca anterior
+        setErro(true);
       } finally {
         setLoading(false);
       }
@@ -31,6 +35,7 @@ function MovieEe() {
         getData();
       } else {
         setMovies([]); // Limpa a lista se a busca estiver vazia
+        setErro(false);
       }
     }, 800);
 
@@ -62,7 +67,11 @@ function MovieEe() {
         </ul>
       )}
 
-      {!loading && movies.length === 0 && (
+      {!loading && erro && (
+        <p>Não foi possível buscar. Verifique sua conexão.</p>
+      )}
+
+      {!loading && !erro && movies.length === 0 && (
         <p>Nenhum filme encontrado.</p>
       )}
     </div>
