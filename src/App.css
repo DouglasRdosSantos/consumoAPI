@@ -320,3 +320,29 @@ main {
   background: none;
   border: none;
 }
+/* Menu de navegação */
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.menu a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.menu a.active {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* Página não encontrada */
+.nao-encontrada {
+  padding: 64px 16px;
+  text-align: center;
+}
