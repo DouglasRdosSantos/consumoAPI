@@ -12,7 +12,7 @@ function MovieEe() {
       setLoading(true);
       setErro(false);
       try {
-        const response = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`);
+        const response = await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=${API_KEY}`);
         const data = await response.json();
 
         if (data.Response === 'True') {

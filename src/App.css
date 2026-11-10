@@ -260,3 +260,63 @@ main {
     border-right-color: var(--border);
   }
 }
+
+/* Avisos do PWA */
+.pwa-offline {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-h);
+  background: var(--accent-bg);
+  border-bottom: 1px solid var(--accent-border);
+  backdrop-filter: blur(8px);
+}
+
+.pwa-toasts {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+
+.pwa-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text-h);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.pwa-toast button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.pwa-install {
+  padding: 4px 12px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+}
+
+.pwa-close {
+  padding: 2px 6px;
+  color: var(--text);
+  background: none;
+  border: none;
+}

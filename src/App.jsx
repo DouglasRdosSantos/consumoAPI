@@ -5,10 +5,12 @@ import Pokemon from "./componentes/Pokemon";
 import FilmeFavorito from "./componentes/FilmeFavorito";
 import MovieEe from "./componentes/MovieEe";
 import Footer from "./componentes/Footer";
+import PwaStatus from "./componentes/PwaStatus";
 
 function App() {
   return (
     <>
+      <PwaStatus />
         <MovieEe />
 
       <main>
