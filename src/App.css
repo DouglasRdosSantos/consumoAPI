@@ -174,10 +174,8 @@ main {
   border-radius: var(--raio);
 }
 
-@media (prefers-color-scheme: dark) {
-  .encontro__erro {
-    color: #fda29b;
-  }
+[data-theme='dark'] .encontro__erro {
+  color: #fda29b;
 }
 
 /* Pokébola girando enquanto carrega */
@@ -399,4 +397,24 @@ main {
   color: var(--text);
   background: none;
   border: none;
+}
+
+/* ---------- Botão de tema claro/escuro ---------- */
+.tema-toggle {
+  padding: 0.4em 0.9em;
+  color: var(--text-h);
+  background: var(--social-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.tema-toggle:hover {
+  border-color: var(--accent-border);
+}
+
+.tema-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

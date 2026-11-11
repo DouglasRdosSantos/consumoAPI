@@ -9,6 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content="Busca de filmes na OMDb, Pokémon e personagens de Dragon Ball, funcionando até sem internet." />
+    <script>
+      (function () {
+        var salvo = null;
+        try { salvo = localStorage.getItem("tema"); } catch (e) {}
+        var sistemaEscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = salvo || (sistemaEscuro ? "dark" : "light");
+      })();
+    </script>
     <title>Consumo de APIs</title>
   </head>
   <body>
