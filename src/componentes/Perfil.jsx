@@ -14,9 +14,7 @@ function Perfil() {
       <img
         src={dbz.data.image}
         className="base"
-        height="280"
         alt={dbz.data.name}
-        style={{ marginTop: "50px" }}
       />
       <div>
         <h1>{perfil.data.nome}</h1>
