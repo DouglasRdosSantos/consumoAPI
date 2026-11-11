@@ -14,8 +14,6 @@ function FilmeFavorito() {
       <img
         src={filme.Poster}
         className="base"
-        width="170"
-        height="179"
         alt={filme.Title}
       />
       <p>Nota do IMDB: {filme.imdbRating}</p>

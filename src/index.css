@@ -1,4 +1,15 @@
+/* ==========================================================
+   Estilos globais — abordagem MOBILE-FIRST
+   O CSS base é feito para celular. As media queries usam
+   min-width e vão ACRESCENTANDO ajustes para telas maiores:
+     48rem  (~768px)  → tablet
+     64rem  (~1024px) → desktop
+     120rem (~1920px) → monitores grandes / ultrawide
+   Tamanhos em unidades relativas (rem, em, %, vw, vh).
+   ========================================================== */
+
 :root {
+  /* Cores */
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -9,88 +20,139 @@
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.1) 0 0.625rem 0.9375rem -0.1875rem,
+    rgba(0, 0, 0, 0.05) 0 0.25rem 0.375rem -0.125rem;
 
+  /* Fontes */
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  /* Espaçamentos (crescem nas telas maiores, ver media queries) */
+  --espaco-xs: 0.5rem;
+  --espaco-sm: 0.75rem;
+  --espaco-md: 1rem;
+  --espaco-lg: 1.5rem;
+  --espaco-xl: 2rem;
+
+  /* Tipografia fluida: clamp(mínimo, ideal pela largura da tela, máximo) */
+  --fonte-h1: clamp(2rem, 1.4rem + 3vw, 3.5rem);
+  --fonte-h2: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+
+  /* Largura máxima do conteúdo */
+  --largura-max: 70rem;
+
+  --raio: 0.375rem;
+
+  font: 1rem/1.45 var(--sans);
+  letter-spacing: 0.01em;
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+/* Tema escuro: ativado pelo atributo data-theme="dark" na tag <html>
+   (o botão ThemeToggle troca esse atributo) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --text: #9ca3af;
+  --text-h: #f3f4f6;
+  --bg: #16171d;
+  --border: #2e303a;
+  --code-bg: #1f2028;
+  --accent: #c084fc;
+  --accent-bg: rgba(192, 132, 252, 0.15);
+  --accent-border: rgba(192, 132, 252, 0.5);
+  --social-bg: rgba(47, 48, 58, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.4) 0 0.625rem 0.9375rem -0.1875rem,
+    rgba(0, 0, 0, 0.25) 0 0.25rem 0.375rem -0.125rem;
+}
+
+[data-theme='dark'] .social-links .button-icon {
+  filter: invert(1) brightness(2);
+}
+
+/* Tablet em diante: mais respiro */
+@media (min-width: 48rem) {
+  :root {
+    --espaco-md: 1.25rem;
+    --espaco-lg: 1.75rem;
+    --espaco-xl: 2.5rem;
   }
 }
 
-@media (prefers-color-scheme: dark) {
+/* Desktop: texto um pouco maior */
+@media (min-width: 64rem) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    font-size: 1.125rem;
   }
+}
 
-  .social-links .button-icon {
-    filter: invert(1) brightness(2);
+/* Monitores grandes / ultrawide: conteúdo mais largo para não sobrar só margem */
+@media (min-width: 120rem) {
+  :root {
+    --largura-max: 100rem;
   }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
 }
 
-#root {
-  width: 1126px;
+img {
   max-width: 100%;
+  height: auto;
+}
+
+#root {
+  width: 100%;
+  max-width: var(--largura-max);
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+}
+
+/* A borda lateral só faz sentido quando sobra espaço dos lados */
+@media (min-width: 64rem) {
+  #root {
+    border-inline: 1px solid var(--border);
+  }
 }
 
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: var(--fonte-h1);
+  letter-spacing: -0.03em;
+  margin: var(--espaco-lg) 0;
 }
+
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  font-size: var(--fonte-h2);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--espaco-xs);
 }
+
 p {
   margin: 0;
 }
@@ -99,13 +161,33 @@ code,
 .counter {
   font-family: var(--mono);
   display: inline-flex;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   color: var(--text-h);
 }
 
 code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
+  font-size: 0.875em;
+  line-height: 1.35;
+  padding: 0.25em 0.5em;
   background: var(--code-bg);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+input[type='text'] {
+  width: 100%;
+  max-width: 25rem;
+  padding: 0.5em 0.75em;
+  color: var(--text-h);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--raio);
+}
+
+input[type='text']:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -7,6 +7,7 @@ import MovieEe from "./componentes/MovieEe";
 import Footer from "./componentes/Footer";
 import PwaStatus from "./componentes/PwaStatus";
 import NaoEncontrada from "./componentes/NaoEncontrada";
+import ThemeToggle from "./componentes/ThemeToggle";
 
 function Inicio() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <nav className="menu">
         <NavLink to="/" end>Início</NavLink>
         <NavLink to="/filmes">Buscar filmes</NavLink>
+        <ThemeToggle />
       </nav>
 
       <main>
