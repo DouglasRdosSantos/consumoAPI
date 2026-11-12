@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import PokemonCard from "./PokemonCard";
 
@@ -21,38 +21,39 @@ function Pokemon() {
   // Um único estado diz em que etapa estamos: "loading", "success" ou "error"
   const [status, setStatus] = useState("loading");
   const [poke, setPoke] = useState(null);
+  // Cada vez que este número muda, o efeito abaixo faz um novo sorteio
+  const [tentativa, setTentativa] = useState(0);
 
-  // Marca se já existe uma requisição em andamento.
-  // useRef muda na hora (o useState só muda no próximo render),
-  // então bloqueia até cliques muito rápidos em sequência.
-  const buscando = useRef(false);
-
-  async function encontrar() {
-    buscando.current = true;
-    try {
-      setPoke(await buscarPokemonAleatorio());
-      setStatus("success");
-    } catch (error) {
-      console.log("Erro ao buscar Pokémon: ", error);
-      setStatus("error");
-    } finally {
-      buscando.current = false;
-    }
-  }
-
-  // Primeiro encontro: roda uma vez quando o componente aparece
   useEffect(() => {
-    encontrar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // Se o componente sair da tela (ou um novo sorteio começar),
+    // ignoramos a resposta antiga para não sobrescrever a nova
+    let cancelado = false;
 
-  function handleClick() {
-    if (buscando.current) return; // já tem busca rodando: ignora o clique
-    setStatus("loading");
-    encontrar();
-  }
+    buscarPokemonAleatorio()
+      .then((dados) => {
+        if (cancelado) return;
+        setPoke(dados);
+        setStatus("success");
+      })
+      .catch((error) => {
+        if (cancelado) return;
+        console.log("Erro ao buscar Pokémon: ", error);
+        setStatus("error");
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [tentativa]);
 
   const carregando = status === "loading";
+
+  function handleClick() {
+    // Bloqueio: enquanto uma busca está rodando, novos cliques são ignorados
+    if (carregando) return;
+    setStatus("loading");
+    setTentativa((t) => t + 1);
+  }
 
   return (
     <div id="docs" className="encontro">
