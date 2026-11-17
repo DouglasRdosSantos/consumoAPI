@@ -1,47 +1,28 @@
 import "./App.css";
-import { NavLink, Route, Routes } from "react-router";
-import Perfil from "./componentes/Perfil";
-import Pokemon from "./componentes/Pokemon";
-import FilmeFavorito from "./componentes/FilmeFavorito";
-import MovieEe from "./componentes/MovieEe";
-import Footer from "./componentes/Footer";
-import PwaStatus from "./componentes/PwaStatus";
+import { Route, Routes } from "react-router";
+import Inicio from "./pages/Inicio";
+import Filmes from "./pages/filmes";
+import PokemonPage from "./pages/pokemon";
+import Dragonball from "./pages/Dragonball";
 import NaoEncontrada from "./componentes/NaoEncontrada";
 import ThemeToggle from "./componentes/ThemeToggle";
-
-function Inicio() {
-  return (
-    <>
-      <Perfil />
-      <div className="ticks"></div>
-      <section id="next-steps">
-        <FilmeFavorito />
-        <Pokemon />
-      </section>
-    </>
-  );
-}
 
 function App() {
   return (
     <>
-      <PwaStatus />
-
-      <nav className="menu">
-        <NavLink to="/" end>Início</NavLink>
-        <NavLink to="/filmes">Buscar filmes</NavLink>
+      <header className="menu">
         <ThemeToggle />
-      </nav>
+      </header>
 
       <main>
         <Routes>
           <Route path="/" element={<Inicio />} />
-          <Route path="/filmes" element={<MovieEe />} />
+          <Route path="/filmes" element={<Filmes />} />
+          <Route path="/pokemon" element={<PokemonPage />} />
+          <Route path="/dragonball" element={<Dragonball />} />
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </main>
-
-      <Footer />
     </>
   );
 }
