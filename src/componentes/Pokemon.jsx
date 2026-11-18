@@ -56,7 +56,7 @@ function Pokemon() {
   }
 
   return (
-    <div id="docs" className="encontro">
+    <div id="docs" className="painel encontro">
       <h2>Random Encounter</h2>
 
       <div className="encontro__area" aria-live="polite" aria-busy={carregando}>

@@ -21,7 +21,7 @@
       color-mix(in srgb, var(--cor-tipo) 35%, transparent),
       color-mix(in srgb, var(--cor-tipo) 8%, transparent) 60%
     ),
-    var(--bg);
+    var(--surface, var(--bg));
   border: 0.1875rem solid var(--cor-tipo);
   border-radius: 1rem;
   box-shadow: var(--shadow);

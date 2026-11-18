@@ -4,17 +4,18 @@ import Inicio from "./pages/Inicio";
 import Filmes from "./pages/filmes";
 import PokemonPage from "./pages/pokemon";
 import Dragonball from "./pages/Dragonball";
+import Menu from "./componentes/Menu";
+import Footer from "./componentes/Footer";
+import PwaStatus from "./componentes/PwaStatus";
 import NaoEncontrada from "./componentes/NaoEncontrada";
-import ThemeToggle from "./componentes/ThemeToggle";
 
 function App() {
   return (
     <>
-      <header className="menu">
-        <ThemeToggle />
-      </header>
+      <PwaStatus />
+      <Menu />
 
-      <main>
+      <main className="conteudo">
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/filmes" element={<Filmes />} />
@@ -23,6 +24,8 @@ function App() {
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </main>
+
+      <Footer />
     </>
   );
 }

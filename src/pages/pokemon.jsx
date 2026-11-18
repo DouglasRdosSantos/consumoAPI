@@ -1,11 +1,13 @@
-import { Link } from "react-router";
+import CabecalhoPagina from "../componentes/CabecalhoPagina";
 import Pokemon from "../componentes/Pokemon";
 
 function PokemonPage() {
   return (
-    <section>
-      <Link to="/" className="botao">← Voltar</Link>
-      <h1>Pokémon</h1>
+    <section className="pagina">
+      <CabecalhoPagina
+        titulo="Pokémon"
+        subtitulo="Um Pokémon selvagem apareceu! Clique no botão para encontrar outro."
+      />
       <Pokemon />
     </section>
   );
