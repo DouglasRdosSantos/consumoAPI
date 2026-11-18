@@ -63,6 +63,17 @@ export default defineConfig({
             },
           },
           {
+            // Fonte Inter (Google Fonts): guardada para o visual ficar igual offline
+            urlPattern: ({ url }) =>
+              ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(url.hostname),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'fontes',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
             urlPattern: ({ url }) => url.hostname === 'www.omdbapi.com',
             handler: 'NetworkFirst',
             options: {

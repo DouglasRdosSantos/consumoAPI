@@ -1,28 +1,39 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// Hook reutilizável: busca os dados de uma URL e controla loading/erro
+// Hook reutilizável: busca os dados de uma URL e controla loading/erro.
+// Guarda junto a URL de onde veio a resposta: se a URL mudar (ex.: trocar de
+// página), "loading" volta a ser true até a resposta nova chegar.
 function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [resultado, setResultado] = useState({ url: null, data: null, error: false });
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(url);
-        setData(response.data);
-      } catch (error) {
-        setError(true);
+    // Ignora a resposta antiga se a URL mudar antes de ela chegar
+    let ativo = true;
+
+    axios
+      .get(url)
+      .then((response) => {
+        if (ativo) setResultado({ url, data: response.data, error: false });
+      })
+      .catch((error) => {
+        if (!ativo) return;
         console.log("Error: ", error);
-      } finally {
-        setLoading(false);
-      }
+        setResultado({ url, data: null, error: true });
+      });
+
+    return () => {
+      ativo = false;
     };
-    getData();
   }, [url]);
 
-  return { data, loading, error };
+  const loading = resultado.url !== url;
+
+  return {
+    data: loading ? null : resultado.data,
+    loading,
+    error: !loading && resultado.error,
+  };
 }
 
 export default useFetch;

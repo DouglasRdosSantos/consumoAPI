@@ -1,11 +1,15 @@
-import { Link } from "react-router";
+import CabecalhoPagina from "../componentes/CabecalhoPagina";
 import FilmeFavorito from "../componentes/FilmeFavorito";
+import MovieEe from "../componentes/MovieEe";
 
 function Filmes() {
   return (
-    <section>
-      <Link to="/" className="botao">← Voltar</Link>
-      <h1>Filmes</h1>
+    <section className="pagina">
+      <CabecalhoPagina
+        titulo="Filmes"
+        subtitulo="Pesquise filmes e séries na OMDb. Os resultados aparecem assim que você para de digitar."
+      />
+      <MovieEe />
       <FilmeFavorito />
     </section>
   );

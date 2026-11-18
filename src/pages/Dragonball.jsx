@@ -1,11 +1,14 @@
-import { Link } from "react-router";
+import CabecalhoPagina from "../componentes/CabecalhoPagina";
+import PersonagensDragonBall from "../componentes/PersonagensDragonBall";
 
 function Dragonball() {
   return (
-    <section>
-      <Link to="/" className="botao">← Voltar</Link>
-      <h1>Dragon Ball</h1>
-      <p>Em breve: personagens de Dragon Ball.</p>
+    <section className="pagina">
+      <CabecalhoPagina
+        titulo="Dragon Ball"
+        subtitulo="Personagens do universo de Dragon Ball, com raça, ki e afiliação."
+      />
+      <PersonagensDragonBall />
     </section>
   );
 }

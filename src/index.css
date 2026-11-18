@@ -9,23 +9,40 @@
    ========================================================== */
 
 :root {
-  /* Cores */
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  /* Cores do tema claro */
+  --bg: #f5f5fa;
+  --surface: #ffffff;
+  --surface-2: #f0eff6;
+  --text: #5d5a6e;
+  --text-h: #15131f;
+  --border: #e3e1ec;
+  --accent: #7c3aed;
+  --accent-2: #db2777;
+  --accent-bg: rgba(124, 58, 237, 0.1);
+  --accent-border: rgba(124, 58, 237, 0.45);
+  --topo-bg: rgba(245, 245, 250, 0.78);
+  --brilho-1: rgba(124, 58, 237, 0.12);
+  --brilho-2: rgba(219, 39, 119, 0.08);
+  --code-bg: var(--surface-2);
+  --social-bg: var(--surface-2);
+  --erro: #b42318;
+  --erro-bg: rgba(240, 68, 56, 0.08);
+  --erro-border: rgba(240, 68, 56, 0.35);
+  --shadow-sm:
+    0 1px 2px rgba(21, 19, 31, 0.05),
+    0 1px 3px rgba(21, 19, 31, 0.07);
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 0.625rem 0.9375rem -0.1875rem,
-    rgba(0, 0, 0, 0.05) 0 0.25rem 0.375rem -0.125rem;
+    0 1rem 2rem -1rem rgba(21, 19, 31, 0.28),
+    0 0.25rem 0.5rem -0.25rem rgba(21, 19, 31, 0.08);
+
+  /* Degradê dos botões: cores fixas para o texto branco ficar legível nos dois temas */
+  --gradiente: linear-gradient(135deg, #7c3aed, #db2777);
+  /* Degradê de títulos: acompanha o tema */
+  --gradiente-texto: linear-gradient(135deg, var(--accent), var(--accent-2));
 
   /* Fontes */
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: var(--sans);
   --mono: ui-monospace, Consolas, monospace;
 
   /* Espaçamentos (crescem nas telas maiores, ver media queries) */
@@ -40,15 +57,16 @@
   --fonte-h2: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
 
   /* Largura máxima do conteúdo */
-  --largura-max: 70rem;
+  --largura-max: 72rem;
 
-  --raio: 0.375rem;
+  /* Cantos arredondados */
+  --raio: 0.625rem;
+  --raio-lg: 1.25rem;
+  --raio-pilula: 999px;
 
-  font: 1rem/1.45 var(--sans);
-  letter-spacing: 0.01em;
+  font: 1rem/1.55 var(--sans);
   color-scheme: light;
   color: var(--text);
-  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -59,22 +77,28 @@
    (o botão ThemeToggle troca esse atributo) */
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --text: #9ca3af;
-  --text-h: #f3f4f6;
-  --bg: #16171d;
-  --border: #2e303a;
-  --code-bg: #1f2028;
-  --accent: #c084fc;
-  --accent-bg: rgba(192, 132, 252, 0.15);
-  --accent-border: rgba(192, 132, 252, 0.5);
-  --social-bg: rgba(47, 48, 58, 0.5);
+  --bg: #0d0e14;
+  --surface: #161821;
+  --surface-2: #1f2230;
+  --text: #a3a3b8;
+  --text-h: #f4f4f8;
+  --border: #2a2d3c;
+  --accent: #a78bfa;
+  --accent-2: #f472b6;
+  --accent-bg: rgba(167, 139, 250, 0.14);
+  --accent-border: rgba(167, 139, 250, 0.5);
+  --topo-bg: rgba(13, 14, 20, 0.72);
+  --brilho-1: rgba(139, 92, 246, 0.18);
+  --brilho-2: rgba(236, 72, 153, 0.1);
+  --erro: #fda29b;
+  --erro-bg: rgba(240, 68, 56, 0.12);
+  --erro-border: rgba(240, 68, 56, 0.4);
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.35);
   --shadow:
-    rgba(0, 0, 0, 0.4) 0 0.625rem 0.9375rem -0.1875rem,
-    rgba(0, 0, 0, 0.25) 0 0.25rem 0.375rem -0.125rem;
-}
-
-[data-theme='dark'] .social-links .button-icon {
-  filter: invert(1) brightness(2);
+    0 1rem 2rem -1rem rgba(0, 0, 0, 0.75),
+    0 0.25rem 0.5rem -0.25rem rgba(0, 0, 0, 0.4);
 }
 
 /* Tablet em diante: mais respiro */
@@ -89,7 +113,7 @@
 /* Desktop: texto um pouco maior */
 @media (min-width: 64rem) {
   :root {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
   }
 }
 
@@ -106,8 +130,14 @@
   box-sizing: border-box;
 }
 
+/* Fundo com dois "brilhos" suaves de cor nos cantos de cima */
 body {
   margin: 0;
+  background:
+    radial-gradient(60rem 40rem at 0% -10%, var(--brilho-1), transparent 60%),
+    radial-gradient(50rem 35rem at 100% -5%, var(--brilho-2), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
 }
 
 img {
@@ -117,59 +147,52 @@ img {
 
 #root {
   width: 100%;
-  max-width: var(--largura-max);
-  margin: 0 auto;
-  text-align: center;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-}
-
-/* A borda lateral só faz sentido quando sobra espaço dos lados */
-@media (min-width: 64rem) {
-  #root {
-    border-inline: 1px solid var(--border);
-  }
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--heading);
-  font-weight: 500;
+  font-weight: 700;
   color: var(--text-h);
 }
 
 h1 {
   font-size: var(--fonte-h1);
-  letter-spacing: -0.03em;
-  margin: var(--espaco-lg) 0;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  margin: 0;
 }
 
 h2 {
   font-size: var(--fonte-h2);
-  line-height: 1.18;
-  letter-spacing: -0.01em;
-  margin: 0 0 var(--espaco-xs);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+h3 {
+  margin: 0;
 }
 
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 0.25rem;
-  color: var(--text-h);
+a {
+  color: var(--accent);
 }
 
 code {
+  font-family: var(--mono);
   font-size: 0.875em;
-  line-height: 1.35;
-  padding: 0.25em 0.5em;
+  padding: 0.2em 0.45em;
+  color: var(--text-h);
   background: var(--code-bg);
+  border-radius: 0.25rem;
 }
 
 button,
@@ -179,15 +202,39 @@ input {
 
 input[type='text'] {
   width: 100%;
-  max-width: 25rem;
-  padding: 0.5em 0.75em;
+  padding: 0.75em 1em;
   color: var(--text-h);
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--raio);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-input[type='text']:focus-visible {
+input[type='text']::placeholder {
+  color: var(--text);
+  opacity: 0.7;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 0.25rem var(--accent-bg);
+}
+
+/* Contorno de foco igual em todo o site (navegação pelo teclado) */
+:where(a, button):focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Some da tela, mas continua sendo lido pelos leitores de tela */
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
