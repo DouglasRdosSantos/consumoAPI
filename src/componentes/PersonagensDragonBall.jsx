@@ -1,7 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
+import useOnline from "../hooks/useOnline";
 
 const POR_PAGINA = 12;
+
+function urlDaPagina(pagina) {
+  return `https://dragonball-api.com/api/characters?page=${pagina}&limit=${POR_PAGINA}`;
+}
+
+// Carrega uma imagem como se ela estivesse na tela, para o service worker
+// guardá-la no cache de imagens (um fetch() comum não passaria por esse cache)
+function carregarImagem(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = img.onerror = resolve;
+    img.src = src;
+  });
+}
+
+// Com internet, baixa em segundo plano todas as páginas e imagens de
+// personagens. O service worker guarda tudo, e a página inteira passa a
+// funcionar offline. Roda uma vez só por visita ao app.
+let jaGuardou = false;
+// Último total de páginas recebido da API (usado na paginação quando dá erro)
+let ultimoTotalPaginas = null;
+
+async function guardarTodasAsPaginas(totalPaginas) {
+  const semServiceWorker = !navigator.serviceWorker?.controller;
+  const economiaDeDados = navigator.connection?.saveData;
+  if (jaGuardou || semServiceWorker || economiaDeDados || !navigator.onLine) return;
+  jaGuardou = true;
+
+  try {
+    for (let pagina = 1; pagina <= totalPaginas; pagina++) {
+      const resposta = await fetch(urlDaPagina(pagina));
+      const dados = await resposta.json();
+      await Promise.all(dados.items.map((personagem) => carregarImagem(personagem.image)));
+    }
+  } catch (error) {
+    // Caiu a internet no meio: tenta de novo na próxima visita à página
+    console.log("Não deu para guardar os personagens para offline: ", error);
+    jaGuardou = false;
+  }
+}
 
 // A API devolve os textos em inglês; traduzimos os mais comuns
 const TRADUCOES = {
@@ -47,11 +88,18 @@ function GradeCarregando() {
 
 function PersonagensDragonBall() {
   const [pagina, setPagina] = useState(1);
-  const { data, loading, error } = useFetch(
-    `https://dragonball-api.com/api/characters?page=${pagina}&limit=${POR_PAGINA}`,
-  );
+  const { data, loading, error } = useFetch(urlDaPagina(pagina));
+  const online = useOnline();
 
-  const totalPaginas = data?.meta.totalPages;
+  // Enquanto uma página carrega (ou dá erro), vale o último total conhecido
+  const totalPaginas = data?.meta.totalPages ?? ultimoTotalPaginas;
+
+  // Assim que sabemos quantas páginas existem, guardamos todas para offline
+  useEffect(() => {
+    if (!data) return;
+    ultimoTotalPaginas = data.meta.totalPages;
+    guardarTodasAsPaginas(data.meta.totalPages);
+  }, [data]);
 
   function irPara(novaPagina) {
     setPagina(novaPagina);
@@ -71,7 +119,11 @@ function PersonagensDragonBall() {
         {error && (
           <div className="aviso aviso--erro" role="alert">
             <span className="aviso__icone" aria-hidden="true">📡</span>
-            <p>Não foi possível carregar os personagens. Verifique sua conexão.</p>
+            <p>
+              {online
+                ? "Não foi possível carregar os personagens. Verifique sua conexão."
+                : "Você está offline e esta página ainda não foi salva. Ela vai aparecer quando a internet voltar."}
+            </p>
           </div>
         )}
 
@@ -108,30 +160,29 @@ function PersonagensDragonBall() {
         )}
       </div>
 
-      {!error && (
-        <nav className="paginacao" aria-label="Páginas de personagens">
-          <button
-            type="button"
-            className="paginacao__botao"
-            onClick={() => irPara(pagina - 1)}
-            disabled={loading || pagina === 1}
-          >
-            ← Anterior
-          </button>
-          <span className="paginacao__atual">
-            Página <strong>{pagina}</strong>
-            {totalPaginas && <> de <strong>{totalPaginas}</strong></>}
-          </span>
-          <button
-            type="button"
-            className="paginacao__botao"
-            onClick={() => irPara(pagina + 1)}
-            disabled={loading || pagina === totalPaginas}
-          >
-            Próxima →
-          </button>
-        </nav>
-      )}
+      {/* Fica visível mesmo com erro, para dar para voltar a uma página salva */}
+      <nav className="paginacao" aria-label="Páginas de personagens">
+        <button
+          type="button"
+          className="paginacao__botao"
+          onClick={() => irPara(pagina - 1)}
+          disabled={loading || pagina === 1}
+        >
+          ← Anterior
+        </button>
+        <span className="paginacao__atual">
+          Página <strong>{pagina}</strong>
+          {totalPaginas && <> de <strong>{totalPaginas}</strong></>}
+        </span>
+        <button
+          type="button"
+          className="paginacao__botao"
+          onClick={() => irPara(pagina + 1)}
+          disabled={loading || !totalPaginas || pagina >= totalPaginas}
+        >
+          Próxima →
+        </button>
+      </nav>
     </div>
   );
 }

@@ -58,7 +58,8 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'imagens',
-              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              // Cabe os 58 personagens de Dragon Ball + pôsteres + Pokémon
+              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 30 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
@@ -85,14 +86,38 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: ({ url }) =>
-              ['pokeapi.co', 'dragonball-api.com'].includes(url.hostname) ||
-              url.hostname.endsWith('.mockapi.io'),
+            // Pokémon: os dados de cada um não mudam, então o que já foi salvo
+            // é usado direto. O componente Pokemon lê este cache pelo nome
+            // ('pokeapi') para sortear offline entre os já encontrados.
+            urlPattern: ({ url }) => url.hostname === 'pokeapi.co',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pokeapi',
+              // Cada resposta tem ~340 KB: 40 Pokémon dá uns 14 MB
+              expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Dragon Ball: cache próprio, para os sorteios de Pokémon não apagarem
+            // as páginas de personagens. Cabe as 5 páginas + o personagem do perfil.
+            urlPattern: ({ url }) => url.hostname === 'dragonball-api.com',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'dragonball',
+              // A API responde com "Vary: Origin"; sem isto o cache pode não achar a resposta
+              matchOptions: { ignoreVary: true },
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 7 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Perfil (mockapi)
+            urlPattern: ({ url }) => url.hostname.endsWith('.mockapi.io'),
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'apis',
-              // Sem limite, este cache cresceria para sempre
-              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 7 },
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 7 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
