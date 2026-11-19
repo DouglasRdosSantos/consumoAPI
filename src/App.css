@@ -719,6 +719,16 @@
   border-radius: var(--raio);
 }
 
+/* Aviso de que o sorteio está usando só os Pokémon salvos */
+.aviso-offline {
+  padding: 0.35em 0.9em;
+  font-size: 0.875rem;
+  color: var(--text-h);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--raio-pilula);
+}
+
 /* Pokébola girando enquanto carrega */
 .encontro__pokebola {
   width: 3rem;

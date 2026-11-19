@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
+import useOnline from "../hooks/useOnline";
 
 // Avisos de "app nativo": conexão, cache offline pronto e botão de instalar
 function PwaStatus() {
-  const [online, setOnline] = useState(navigator.onLine);
+  const online = useOnline();
   const [installEvent, setInstallEvent] = useState(null);
 
   // Registra o service worker. Com registerType 'autoUpdate', versões novas
@@ -13,9 +14,6 @@ function PwaStatus() {
   } = useRegisterSW();
 
   useEffect(() => {
-    const goOnline = () => setOnline(true);
-    const goOffline = () => setOnline(false);
-
     // O navegador avisa quando o app pode ser instalado. Guardamos o evento
     // para abrir a janela de instalação pelo nosso botão.
     const onBeforeInstall = (event) => {
@@ -24,14 +22,10 @@ function PwaStatus() {
     };
     const onInstalled = () => setInstallEvent(null);
 
-    window.addEventListener("online", goOnline);
-    window.addEventListener("offline", goOffline);
     window.addEventListener("beforeinstallprompt", onBeforeInstall);
     window.addEventListener("appinstalled", onInstalled);
 
     return () => {
-      window.removeEventListener("online", goOnline);
-      window.removeEventListener("offline", goOffline);
       window.removeEventListener("beforeinstallprompt", onBeforeInstall);
       window.removeEventListener("appinstalled", onInstalled);
     };

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useOnline from '../hooks/useOnline';
 
 const API_KEY = '59ab1eb9';
 
@@ -57,9 +58,11 @@ function MovieEe() {
   const [movies, setMovies] = useState([]);
   const [total, setTotal] = useState(0);
   const [buscado, setBuscado] = useState('');
-  const [loading, setLoading] = useState(false);
+  // Começa carregando: a busca inicial ("Avengers") sai depois do debounce
+  const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(false);
   const [query, setQuery] = useState('Avengers');
+  const online = useOnline();
 
   useEffect(() => {
     // Ignora a resposta de uma busca antiga se o usuário já digitou outra coisa
@@ -100,6 +103,7 @@ function MovieEe() {
         setTotal(0);
         setBuscado('');
         setErro(false);
+        setLoading(false);
       }
     }, 800);
 
@@ -109,7 +113,9 @@ function MovieEe() {
       ativo = false;
       clearTimeout(delayDebounceFn);
     };
-  }, [query]); // Executa sempre que a 'query' for alterada
+    // Executa sempre que a 'query' for alterada, e também quando a internet
+    // cai ou volta (offline, a busca é atendida pelo que ficou salvo)
+  }, [query, online]);
 
   return (
     <div className="painel busca">
@@ -125,7 +131,12 @@ function MovieEe() {
           id="busca-filme"
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            // Mostra o carregamento já durante o debounce, em vez de
+            // piscar "Nenhum filme encontrado" enquanto a pessoa digita
+            if (e.target.value.trim() !== '') setLoading(true);
+          }}
           placeholder="Digite o nome de um filme ou série..."
           autoComplete="off"
         />
@@ -176,7 +187,11 @@ function MovieEe() {
         {!loading && erro && (
           <div className="aviso aviso--erro busca__info" role="alert">
             <span className="aviso__icone" aria-hidden="true">📡</span>
-            <p>Não foi possível buscar. Verifique sua conexão.</p>
+            <p>
+              {online
+                ? 'Não foi possível buscar. Verifique sua conexão.'
+                : 'Você está offline e esta busca ainda não foi salva. Ela vai funcionar quando a internet voltar.'}
+            </p>
           </div>
         )}
 
